@@ -1,6 +1,7 @@
 FROM golang:1.22-alpine AS build
 WORKDIR /app
-ENV GONOSUMDB=* GOFLAGS=-mod=mod GOPROXY=direct
+RUN apk add --no-cache git
+ENV GONOSUMDB=* GOINSECURE=* GOPROXY=direct GOFLAGS=-mod=mod GIT_SSL_NO_VERIFY=true
 COPY . .
 RUN go mod tidy && CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /chat-service .
 
